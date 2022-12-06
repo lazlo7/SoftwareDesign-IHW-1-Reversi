@@ -1,4 +1,4 @@
-package net.requef.reversi.game;
+package net.requef.reversi.app;
 
 public interface Drawable {
     void draw();
