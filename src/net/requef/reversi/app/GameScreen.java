@@ -5,9 +5,11 @@ import net.requef.reversi.util.ConsoleUtil;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.function.IntConsumer;
 
 public class GameScreen extends Screen {
     private final Board board = new Board(8);
+    private final IntConsumer bestScoreSetter;
     private Map<BoardPos, List<BoardPos>> possibleMoves;
     private Player currentPlayer;
     private Player enemyPlayer;
@@ -17,10 +19,12 @@ public class GameScreen extends Screen {
     public GameScreen(final ScreenPusher screenPusher,
                       final Scanner inputScanner,
                       final Player currentPlayer,
-                      final Player enemyPlayer) {
+                      final Player enemyPlayer,
+                      final IntConsumer bestScoreSetter) {
         super(screenPusher, inputScanner);
         this.currentPlayer = currentPlayer;
         this.enemyPlayer = enemyPlayer;
+        this.bestScoreSetter = bestScoreSetter;
         possibleMoves = board.getPossibleMoves(currentPlayer.getSide(), enemyPlayer.getSide());
     }
 
@@ -133,6 +137,15 @@ public class GameScreen extends Screen {
             log(String.format("WHITE wins with %d points!", whitePoints));
         } else {
             log("Draw! Both players have the same number of points.");
+        }
+
+        if (currentPlayer instanceof HumanPlayer && enemyPlayer instanceof HumanPlayer) {
+            bestScoreSetter.accept(Math.max(blackPoints, whitePoints));
+        } else if (currentPlayer instanceof HumanPlayer
+                && board.getCellCount(currentPlayer.getSide()) > board.getCellCount(enemyPlayer.getSide())) {
+            bestScoreSetter.accept(board.getCellCount(currentPlayer.getSide()));
+        } else if (enemyPlayer instanceof HumanPlayer && board.getCellCount(enemyPlayer.getSide()) > board.getCellCount(currentPlayer.getSide())) {
+            bestScoreSetter.accept(board.getCellCount(enemyPlayer.getSide()));
         }
 
         isGameOver = true;

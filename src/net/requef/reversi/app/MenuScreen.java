@@ -20,6 +20,8 @@ public class MenuScreen extends Screen {
                  \\|__|         \\/__/                       \\/__/         \\|__|         \\/__/               \s
             """;
 
+    private int bestScore = -1;
+
     public MenuScreen(final ScreenPusher screenPusher,
                       final Scanner inputScanner) {
         super(screenPusher, inputScanner);
@@ -28,6 +30,9 @@ public class MenuScreen extends Screen {
     @Override
     public void draw() {
         System.out.printf("%n%n%s%n%n", ASCII_BANNER);
+        if (bestScore != -1) {
+            System.out.printf("Best score: %d%n%n", bestScore);
+        }
         System.out.printf("(hint: type \"help\" for help)%n%n");
     }
 
@@ -58,7 +63,8 @@ public class MenuScreen extends Screen {
     private void startGame() {
         screenPusher.push(new PlayerChooseScreen(screenPusher, inputScanner,
                 blackPlayer -> screenPusher.push(new PlayerChooseScreen(screenPusher, inputScanner,
-                        whitePlayer -> screenPusher.push(new GameScreen(screenPusher, inputScanner, blackPlayer, whitePlayer)),
+                        whitePlayer -> screenPusher.push(new GameScreen(screenPusher, inputScanner, blackPlayer,
+                                whitePlayer, score -> bestScore = Math.max(bestScore, score))),
                         CellType.WHITE)),
                 CellType.BLACK));
     }
