@@ -4,3 +4,5 @@
 2. Intellij IDEA -> справа сверху Build Project (ctrl+F9)
 3. В папке ./out/artifacts/Reversi_jar/ появится Reversi.jar
 4. Запускаем через отдельный терминал (не в IDE'шном): `java -jar Reversi.jar`
+
+Постарался выполнить все критерии.
