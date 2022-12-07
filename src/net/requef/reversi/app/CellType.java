@@ -6,7 +6,7 @@ public enum CellType {
     EMPTY(ConsoleColors.BLACK, ' '),
     BLACK(ConsoleColors.BLACK_BRIGHT, 'X'),
     WHITE(ConsoleColors.WHITE_BRIGHT, 'X'),
-    POSSIBLE(ConsoleColors.YELLOW_BACKGROUND, ' ');
+    POSSIBLE(ConsoleColors.GREEN_BACKGROUND_BRIGHT, ' ');
 
     private final String consoleColor;
     private final char symbol;

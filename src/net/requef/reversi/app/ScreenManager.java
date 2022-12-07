@@ -3,7 +3,7 @@ package net.requef.reversi.app;
 import java.util.Deque;
 import java.util.LinkedList;
 
-public class ScreenManager implements ScreenAdder {
+public class ScreenManager implements ScreenPusher {
     private final Deque<Screen> screens = new LinkedList<>();
 
     @Override

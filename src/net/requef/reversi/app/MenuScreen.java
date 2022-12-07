@@ -20,15 +20,16 @@ public class MenuScreen extends Screen {
                  \\|__|         \\/__/                       \\/__/         \\|__|         \\/__/               \s
             """;
 
-    public MenuScreen(final ScreenAdder screenAdder,
+    public MenuScreen(final ScreenPusher screenPusher,
                       final Scanner inputScanner) {
-        super(screenAdder, inputScanner);
+        super(screenPusher, inputScanner);
     }
 
     @Override
     public void draw() {
         System.out.printf("%n%n%s%n%n", ASCII_BANNER);
-        System.out.printf("(hint: type 'help' for help)%n%n");    }
+        System.out.printf("(hint: type \"help\" for help)%n%n");
+    }
 
     @Override
     public void onUpdate() {
@@ -46,7 +47,7 @@ public class MenuScreen extends Screen {
         } else if ("start".equals(cmd)) {
             startGame();
         } else if ("settings".equals(cmd)) {
-            screenAdder.push(new SettingsScreen(screenAdder, inputScanner));
+            screenPusher.push(new SettingsScreen(screenPusher, inputScanner));
         } else if ("help".equals(cmd)) {
             logHelp();
         } else {
@@ -54,15 +55,10 @@ public class MenuScreen extends Screen {
         }
     }
 
-    @Override
-    public boolean shouldExit() {
-        return shouldExit;
-    }
-
     private void startGame() {
-        screenAdder.push(new PlayerChooseScreen(screenAdder, inputScanner,
-                blackPlayer -> screenAdder.push(new PlayerChooseScreen(screenAdder, inputScanner,
-                        whitePlayer -> screenAdder.push(new GameScreen(screenAdder, inputScanner, blackPlayer, whitePlayer)),
+        screenPusher.push(new PlayerChooseScreen(screenPusher, inputScanner,
+                blackPlayer -> screenPusher.push(new PlayerChooseScreen(screenPusher, inputScanner,
+                        whitePlayer -> screenPusher.push(new GameScreen(screenPusher, inputScanner, blackPlayer, whitePlayer)),
                         CellType.WHITE)),
                 CellType.BLACK));
     }

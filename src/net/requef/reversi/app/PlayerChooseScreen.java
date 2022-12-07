@@ -9,11 +9,11 @@ public class PlayerChooseScreen extends Screen {
     private final Consumer<Player> playerSetter;
     private final CellType playerSide;
 
-    public PlayerChooseScreen(final ScreenAdder screenAdder,
+    public PlayerChooseScreen(final ScreenPusher screenPusher,
                               final Scanner inputScanner,
                               final Consumer<Player> playerSetter,
                               final CellType playerSide) {
-        super(screenAdder, inputScanner);
+        super(screenPusher, inputScanner);
         this.playerSetter = playerSetter;
         this.playerSide = playerSide;
     }
@@ -41,10 +41,5 @@ public class PlayerChooseScreen extends Screen {
         log("accepted " + player.getClass().getSimpleName());
         playerSetter.accept(player);
         shouldExit = true;
-    }
-
-    @Override
-    public boolean shouldExit() {
-        return shouldExit;
     }
 }

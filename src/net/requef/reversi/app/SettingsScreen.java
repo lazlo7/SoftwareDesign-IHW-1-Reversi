@@ -5,9 +5,9 @@ import net.requef.reversi.util.ConsoleUtil;
 import java.util.Scanner;
 
 public class SettingsScreen extends Screen {
-    public SettingsScreen(final ScreenAdder screenAdder,
+    public SettingsScreen(final ScreenPusher screenPusher,
                           final Scanner inputScanner) {
-        super(screenAdder, inputScanner);
+        super(screenPusher, inputScanner);
     }
 
     @Override
@@ -54,10 +54,5 @@ public class SettingsScreen extends Screen {
         log("exit - return to menu;");
         log("toggle <setting_number> - toggle setting with given number;");
         log("help - show this help message.");
-    }
-
-    @Override
-    public boolean shouldExit() {
-        return shouldExit;
     }
 }

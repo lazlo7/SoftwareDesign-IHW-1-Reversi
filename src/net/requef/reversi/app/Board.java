@@ -4,7 +4,6 @@ public class Board implements Drawable {
     private static final int CELL_INNER_MARGIN = 1;
     private final int boardSize;
     private final int columnCount;
-
     private final CellType[][] board;
 
     public Board(int boardSize) {
@@ -48,10 +47,6 @@ public class Board implements Drawable {
         }
     }
 
-    public boolean areValidCoordinates(int row, int col) {
-        return row >= 0 && row < boardSize && col >= 0 && col < boardSize;
-    }
-
     public int getCellCount(final CellType cellType) {
         int count = 0;
         for (int i = 0; i < boardSize; i++) {
@@ -62,6 +57,18 @@ public class Board implements Drawable {
             }
         }
         return count;
+    }
+
+    public boolean isFull() {
+        for (int row = 0; row < boardSize; row++) {
+            for (int col = 0; col < boardSize; col++) {
+                if (isVacant(row, col)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     public void reset() {
@@ -79,8 +86,8 @@ public class Board implements Drawable {
     }
 
     public String toPlayersCoordinates(final BoardPos boardCoordinates) {
-        char col = (char) (boardCoordinates.row() + 'a');
-        char row = (char) (boardSize - (boardCoordinates.col() - '0'));
+        char col = (char) (boardCoordinates.col() + 'a');
+        char row = (char) (boardSize - (boardCoordinates.row() - '0'));
         return String.format("%c%c", col, row);
     }
 

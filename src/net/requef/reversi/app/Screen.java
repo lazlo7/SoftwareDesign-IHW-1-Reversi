@@ -4,13 +4,12 @@ import java.util.*;
 
 public abstract class Screen implements Drawable {
     private final Queue<String> logQueue = new LinkedList<>();
-    protected final ScreenAdder screenAdder;
+    protected final ScreenPusher screenPusher;
     protected final Scanner inputScanner;
-
     protected boolean shouldExit = false;
 
-    protected Screen(final ScreenAdder screenAdder, final Scanner inputScanner) {
-        this.screenAdder = screenAdder;
+    protected Screen(final ScreenPusher screenPusher, final Scanner inputScanner) {
+        this.screenPusher = screenPusher;
         this.inputScanner = inputScanner;
     }
 
