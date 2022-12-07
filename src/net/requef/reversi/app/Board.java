@@ -1,5 +1,8 @@
 package net.requef.reversi.app;
 
+import java.util.*;
+import java.util.function.Consumer;
+
 public class Board implements Drawable {
     private static final int CELL_INNER_MARGIN = 1;
     private final int boardSize;
@@ -101,6 +104,93 @@ public class Board implements Drawable {
         }
         final var boardPos = fromPlayersCoordinates(input);
         return isBoardPosValid(boardPos.row()) && isBoardPosValid(boardPos.col());
+    }
+
+    public Map<BoardPos, List<BoardPos>> getPossibleMoves(final CellType player,
+                                                           final CellType enemy) {
+        // Update the possible moves map.
+        final Map<BoardPos, List<BoardPos>> possibleMoves = new HashMap<>();
+
+        final Consumer<Map.Entry<BoardPos, List<BoardPos>>> addIfPossible
+                = (final Map.Entry<BoardPos, List<BoardPos>> entry) -> {
+            if (entry != null && !entry.getValue().isEmpty()) {
+                if (possibleMoves.containsKey(entry.getKey())) {
+                    possibleMoves.get(entry.getKey()).addAll(entry.getValue());
+                    return;
+                }
+                possibleMoves.put(entry.getKey(), entry.getValue());
+            }
+        };
+
+        for (int row = 0; row < boardSize; ++row) {
+            for (int col = 0; col < boardSize; ++col) {
+                // Check only such cells that don't contain black or white chips.
+                if (board[row][col] != player) {
+                    continue;
+                }
+
+                // Diagonal (going to top-left).
+                addIfPossible.accept(explorePossibleMove(row, col, -1, -1, player, enemy));
+                // Diagonal (going to top-right).
+                addIfPossible.accept(explorePossibleMove(row, col, -1, 1, player, enemy));
+                // Diagonal (going to bottom-right).
+                addIfPossible.accept(explorePossibleMove(row, col, 1, 1, player, enemy));
+                // Diagonal (going to bottom-left).
+                addIfPossible.accept(explorePossibleMove(row, col, 1, -1, player, enemy));
+                // Horizontal (going to left).
+                addIfPossible.accept(explorePossibleMove(row, col, 0, -1, player, enemy));
+                // Horizontal (going to right).
+                addIfPossible.accept(explorePossibleMove(row, col, 0, 1, player, enemy));
+                // Vertical (going to top).
+                addIfPossible.accept(explorePossibleMove(row, col, -1, 0, player, enemy));
+                // Vertical (going to bottom).
+                addIfPossible.accept(explorePossibleMove(row, col, 1, 0, player, enemy));
+            }
+        }
+
+        return possibleMoves;
+    }
+
+    private Map.Entry<BoardPos, List<BoardPos>> explorePossibleMove(int row,
+                                                                    int col,
+                                                                    int rowDir,
+                                                                    int colDir,
+                                                                    final CellType player,
+                                                                    final CellType enemy) {
+        final List<BoardPos> flipped = new ArrayList<>();
+
+        while (true) {
+            row += rowDir;
+            col += colDir;
+
+            // If we are out of bounds, return an empty list.
+            if (!(isBoardPosValid(row) && isBoardPosValid(col))) {
+                return null;
+            }
+
+            // Continue if we found a cell of the current's player's side.
+            if (board[row][col] == player) {
+                // But If we found at least one flipped cell, return an empty list.
+                if (!flipped.isEmpty()) {
+                    return null;
+                }
+                continue;
+            }
+
+            // Check if we found a cell of the enemy's side and add it to the list.
+            if (board[row][col] == enemy) {
+                flipped.add(new BoardPos(row, col));
+                continue;
+            }
+
+            // If we found a vacant cell, return the list of flipped cells.
+            if (isVacant(row, col)) {
+                return new AbstractMap.SimpleImmutableEntry<>(new BoardPos(row, col), flipped);
+            }
+
+            // Should be unreachable.
+            assert false : "Unreachable";
+        }
     }
 
     @Override

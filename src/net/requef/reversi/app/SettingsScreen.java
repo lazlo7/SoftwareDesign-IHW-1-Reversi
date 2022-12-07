@@ -12,8 +12,10 @@ public class SettingsScreen extends Screen {
 
     @Override
     public void draw() {
-        System.out.println("Settings:");
-        System.out.printf("1: [%s] Print possible moves%n", GameSettings.showPossibleMoves ? "X" : " ");
+        System.out.printf("%n%nSettings:%n");
+        System.out.printf("%n\t1: [%s] Print possible moves%n", GameSettings.showPossibleMoves ? "X" : " ");
+        System.out.printf("%n\t2: [%s] Add delay to bot moves%n", GameSettings.addDelayToBotMoves ? "X" : " ");
+        System.out.println();
     }
 
     @Override
@@ -27,7 +29,6 @@ public class SettingsScreen extends Screen {
         }
 
         final var cmd = input.get(0);
-
         if ("exit".equals(cmd)) {
             shouldExit = true;
         } else if ("toggle".equals(cmd)) {
@@ -45,6 +46,7 @@ public class SettingsScreen extends Screen {
     private void toggleSetting(final String settingNumber) {
         switch (settingNumber) {
             case "1" -> GameSettings.showPossibleMoves = !GameSettings.showPossibleMoves;
+            case "2" -> GameSettings.addDelayToBotMoves = !GameSettings.addDelayToBotMoves;
             default -> log("Unknown setting number");
         }
     }

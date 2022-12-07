@@ -2,6 +2,8 @@ package net.requef.reversi.app;
 
 import net.requef.reversi.util.ConsoleUtil;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.function.Consumer;
 
@@ -14,7 +16,8 @@ public class HumanPlayer extends Player {
     public MoveData getMove(final Board board,
                             final CellType enemy,
                             final Scanner inputScanner,
-                            final Consumer<String> logger) {
+                            final Consumer<String> logger,
+                            final Map<BoardPos, List<BoardPos>> possibleMoves) {
         final var input = Screen.splitInput(ConsoleUtil.readLine(inputScanner));
 
         if (input.size() != 1) {

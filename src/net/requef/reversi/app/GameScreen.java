@@ -2,12 +2,13 @@ package net.requef.reversi.app;
 
 import net.requef.reversi.util.ConsoleUtil;
 
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
 public class GameScreen extends Screen {
     private final Board board = new Board(8);
-    private final Map<BoardPos, List<BoardPos>> possibleMoves = new HashMap<>();
+    private Map<BoardPos, List<BoardPos>> possibleMoves;
     private Player currentPlayer;
     private Player enemyPlayer;
     private boolean isGameOver = false;
@@ -20,8 +21,7 @@ public class GameScreen extends Screen {
         super(screenPusher, inputScanner);
         this.currentPlayer = currentPlayer;
         this.enemyPlayer = enemyPlayer;
-
-        updatePossibleMoves();
+        possibleMoves = board.getPossibleMoves(currentPlayer.getSide(), enemyPlayer.getSide());
     }
 
     @Override
@@ -78,12 +78,14 @@ public class GameScreen extends Screen {
             log("No possible moves, skipping turn...");
             previousTurnSkipped = true;
             switchPlayers();
+            possibleMoves = board.getPossibleMoves(currentPlayer.getSide(), enemyPlayer.getSide());
             return;
         }
 
         previousTurnSkipped = false;
         System.out.print("input> ");
-        final var move = currentPlayer.getMove(board, enemyPlayer.getSide(), inputScanner, this::log);
+        final var move =
+                currentPlayer.getMove(board, enemyPlayer.getSide(), inputScanner, this::log, possibleMoves);
 
         if (move == null) {
             return;
@@ -118,7 +120,7 @@ public class GameScreen extends Screen {
 
         // Calculate possible moves for the upcoming turn,
         // so that they will get drawn on the next draw call.
-        updatePossibleMoves();
+        possibleMoves = board.getPossibleMoves(currentPlayer.getSide(), enemyPlayer.getSide());
     }
 
     private void endGame() {
@@ -134,88 +136,6 @@ public class GameScreen extends Screen {
         }
 
         isGameOver = true;
-    }
-
-    private void updatePossibleMoves() {
-        // Update the possible moves map.
-        possibleMoves.clear();
-
-        final Consumer<Map.Entry<BoardPos, List<BoardPos>>> addIfPossible
-                = (final Map.Entry<BoardPos, List<BoardPos>> entry) -> {
-            if (entry != null && !entry.getValue().isEmpty()) {
-                if (possibleMoves.containsKey(entry.getKey())) {
-                    possibleMoves.get(entry.getKey()).addAll(entry.getValue());
-                    return;
-                }
-                possibleMoves.put(entry.getKey(), entry.getValue());
-            }
-        };
-
-        for (int row = 0; row < board.getBoardSize(); ++row) {
-            for (int col = 0; col < board.getBoardSize(); ++col) {
-                // Check only such cells that don't contain black or white chips.
-                if (board.getCell(row, col) != currentPlayer.getSide()) {
-                    continue;
-                }
-
-                // Diagonal (going to top-left).
-                addIfPossible.accept(explorePossibleMove(row, col, -1, -1));
-                // Diagonal (going to top-right).
-                addIfPossible.accept(explorePossibleMove(row, col, -1, 1));
-                // Diagonal (going to bottom-right).
-                addIfPossible.accept(explorePossibleMove(row, col, 1, 1));
-                // Diagonal (going to bottom-left).
-                addIfPossible.accept(explorePossibleMove(row, col, 1, -1));
-                // Horizontal (going to left).
-                addIfPossible.accept(explorePossibleMove(row, col, 0, -1));
-                // Horizontal (going to right).
-                addIfPossible.accept(explorePossibleMove(row, col, 0, 1));
-                // Vertical (going to top).
-                addIfPossible.accept(explorePossibleMove(row, col, -1, 0));
-                // Vertical (going to bottom).
-                addIfPossible.accept(explorePossibleMove(row, col, 1, 0));
-            }
-        }
-    }
-
-    private Map.Entry<BoardPos, List<BoardPos>> explorePossibleMove(int row,
-                                                                   int col,
-                                                                   int rowDir,
-                                                                   int colDir) {
-        final List<BoardPos> flipped = new ArrayList<>();
-
-        while (true) {
-            row += rowDir;
-            col += colDir;
-
-            // If we are out of bounds, return an empty list.
-            if (!(board.isBoardPosValid(row) && board.isBoardPosValid(col))) {
-                return null;
-            }
-
-            // Continue if we found a cell of the current's player's side.
-            if (board.getCell(row, col) == currentPlayer.getSide()) {
-                // But If we found at least one flipped cell, return an empty list.
-                if (!flipped.isEmpty()) {
-                    return null;
-                }
-                continue;
-            }
-
-            // Check if we found a cell of the enemy's side and add it to the list.
-            if (board.getCell(row, col) == enemyPlayer.getSide()) {
-                flipped.add(new BoardPos(row, col));
-                continue;
-            }
-
-            // If we found a vacant cell, return the list of flipped cells.
-            if (board.isVacant(row, col)) {
-                return new AbstractMap.SimpleImmutableEntry<>(new BoardPos(row, col), flipped);
-            }
-
-            // Should be unreachable.
-            assert false : "Unreachable";
-        }
     }
 
     private void switchPlayers() {
