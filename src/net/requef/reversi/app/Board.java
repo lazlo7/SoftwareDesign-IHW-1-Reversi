@@ -20,6 +20,13 @@ public class Board implements Drawable {
         return boardSize;
     }
 
+    public void setBoard(CellType[][] from) {
+        assert from.length == boardSize && from[0].length == boardSize : "Invalid board size";
+        for (int i = 0; i < boardSize; i++) {
+            System.arraycopy(from[i], 0, board[i], 0, boardSize);
+        }
+    }
+
     public CellType getCell(int row, int col) {
         return board[row][col];
     }

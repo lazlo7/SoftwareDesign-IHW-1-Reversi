@@ -27,7 +27,7 @@ public abstract class BotPlayer extends Player {
             }
         }
 
-        return new MoveData(bestMove, false);
+        return new MoveData(bestMove, false, false);
     }
 
     protected double getBestMoveScore(final Board board,

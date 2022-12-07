@@ -50,6 +50,6 @@ public class ProBotPlayer extends BotPlayer {
             sleepThinkingDelay();
         }
 
-        return new MoveData(bestMove, false);
+        return new MoveData(bestMove, false, false);
     }
 }

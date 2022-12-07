@@ -2,14 +2,13 @@ package net.requef.reversi.app;
 
 import net.requef.reversi.util.ConsoleUtil;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 import java.util.function.IntConsumer;
 
 public class GameScreen extends Screen {
     private final Board board = new Board(8);
     private final IntConsumer bestScoreSetter;
+    private final Deque<CellType[][]> boardHistory = new LinkedList<>();
     private Map<BoardPos, List<BoardPos>> possibleMoves;
     private Player currentPlayer;
     private Player enemyPlayer;
@@ -103,11 +102,26 @@ public class GameScreen extends Screen {
             return;
         }
 
+        if (move.revert()) {
+            if (boardHistory.size() < 2) {
+                log("Can't revert, no moves to revert to.");
+                return;
+            }
+            boardHistory.removeLast();
+            board.setBoard(boardHistory.removeLast());
+            possibleMoves = board.getPossibleMoves(currentPlayer.getSide(), enemyPlayer.getSide());
+            log(String.format("%s reverted to the last move", currentPlayer.getSide()));
+            return;
+        }
+
         assert move.pos() != null : "move.pos() can't be null unless player gave up";
         if (!possibleMoves.containsKey(move.pos())) {
             log("Invalid move");
             return;
         }
+
+        // Save the board state to history.
+        saveBoard();
 
         // Make the move.
         board.setCell(move.pos().row(), move.pos().col(), currentPlayer.getSide());
@@ -125,6 +139,16 @@ public class GameScreen extends Screen {
         // Calculate possible moves for the upcoming turn,
         // so that they will get drawn on the next draw call.
         possibleMoves = board.getPossibleMoves(currentPlayer.getSide(), enemyPlayer.getSide());
+    }
+
+    private void saveBoard() {
+        final var boardCopy = new CellType[board.getBoardSize()][board.getBoardSize()];
+        for (int i = 0; i < board.getBoardSize(); i++) {
+            for (int j = 0; j < board.getBoardSize(); j++) {
+                boardCopy[i][j] = board.getCell(i, j);
+            }
+        }
+        boardHistory.add(boardCopy);
     }
 
     private void endGame() {

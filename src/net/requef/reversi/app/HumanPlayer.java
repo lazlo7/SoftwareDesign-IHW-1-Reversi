@@ -27,10 +27,12 @@ public class HumanPlayer extends Player {
 
         final var cmd = input.get(0);
         if ("giveup".equals(cmd)) {
-            return new MoveData(null, true);
+            return new MoveData(null, true, false);
         } else if ("help".equals(cmd)) {
             logHelp(logger);
             return null;
+        } else if ("revert".equals(cmd)) {
+            return new MoveData(null, false, true);
         }
 
         if (!board.areValidPlayersCoordinates(cmd)) {
@@ -38,13 +40,14 @@ public class HumanPlayer extends Player {
             return null;
         }
 
-        return new MoveData(board.fromPlayersCoordinates(cmd), false);
+        return new MoveData(board.fromPlayersCoordinates(cmd), false, false);
     }
 
     private void logHelp(final Consumer<String> logger) {
         logger.accept("Available commands:");
         logger.accept("giveup - give up (instantly lose the game and exit);");
         logger.accept("help - show this help message.");
+        logger.accept("revert - revert to your previous move.");
         logger.accept("<position> - place your piece on the <position> (e.g \"a3\", \"d5\");");
     }
 }
