@@ -1,4 +1,6 @@
-package net.requef.reversi.app;
+package net.requef.reversi.app.board;
+
+import net.requef.reversi.app.Drawable;
 
 import java.util.*;
 import java.util.function.Consumer;

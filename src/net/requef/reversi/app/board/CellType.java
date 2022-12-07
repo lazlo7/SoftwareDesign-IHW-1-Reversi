@@ -1,4 +1,4 @@
-package net.requef.reversi.app;
+package net.requef.reversi.app.board;
 
 import net.requef.reversi.util.ConsoleColors;
 

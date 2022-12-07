@@ -1,5 +1,10 @@
-package net.requef.reversi.app;
+package net.requef.reversi.app.screen;
 
+import net.requef.reversi.app.board.CellType;
+import net.requef.reversi.app.player.EasyBotPlayer;
+import net.requef.reversi.app.player.HumanPlayer;
+import net.requef.reversi.app.player.Player;
+import net.requef.reversi.app.player.ProBotPlayer;
 import net.requef.reversi.util.ConsoleUtil;
 
 import java.util.Scanner;
@@ -20,7 +25,7 @@ public class PlayerChooseScreen extends Screen {
 
     @Override
     public void draw() {
-        System.out.printf("Choose %s player's type: <human/easybot/probot>%n", playerSide);
+        System.out.printf("%n%n%n\t\tChoose %s player's type: <human/easybot/probot>%n%n%n", playerSide);
     }
 
     @Override

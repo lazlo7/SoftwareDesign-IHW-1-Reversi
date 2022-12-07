@@ -1,4 +1,7 @@
-package net.requef.reversi.app;
+package net.requef.reversi.app.screen;
+
+import net.requef.reversi.app.Drawable;
+import net.requef.reversi.app.screen.ScreenPusher;
 
 import java.util.*;
 

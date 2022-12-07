@@ -1,4 +1,4 @@
-package net.requef.reversi.app;
+package net.requef.reversi.app.screen;
 
 import java.util.Deque;
 import java.util.LinkedList;

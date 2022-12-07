@@ -1,5 +1,7 @@
 package net.requef.reversi.app;
 
+import net.requef.reversi.app.screen.MenuScreen;
+import net.requef.reversi.app.screen.ScreenManager;
 import net.requef.reversi.util.ConsoleUtil;
 
 import java.util.Scanner;

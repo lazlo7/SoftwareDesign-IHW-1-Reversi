@@ -1,5 +1,6 @@
-package net.requef.reversi.app;
+package net.requef.reversi.app.screen;
 
+import net.requef.reversi.app.GameSettings;
 import net.requef.reversi.util.ConsoleUtil;
 
 import java.util.Scanner;

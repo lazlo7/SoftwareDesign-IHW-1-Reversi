@@ -1,4 +1,8 @@
-package net.requef.reversi.app;
+package net.requef.reversi.app.player;
+
+import net.requef.reversi.app.board.Board;
+import net.requef.reversi.app.board.BoardPos;
+import net.requef.reversi.app.board.CellType;
 
 import java.util.List;
 import java.util.Map;
