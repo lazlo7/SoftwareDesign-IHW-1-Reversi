@@ -29,7 +29,7 @@ public abstract class Screen implements Drawable {
         }
     }
 
-    protected List<String> splitInput(final String input) {
+    public static List<String> splitInput(final String input) {
         return Arrays.stream(input.split(" ")).toList();
     }
 

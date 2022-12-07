@@ -5,6 +5,21 @@ import net.requef.reversi.util.ConsoleUtil;
 import java.util.Scanner;
 
 public class MenuScreen extends Screen {
+    private static final String ASCII_BANNER = """
+            
+                  ___           ___           ___           ___           ___           ___                \s
+                 /\\  \\         /\\  \\         /\\__\\         /\\  \\         /\\  \\         /\\  \\          ___  \s
+                /::\\  \\       /::\\  \\       /:/  /        /::\\  \\       /::\\  \\       /::\\  \\        /\\  \\ \s
+               /:/\\:\\  \\     /:/\\:\\  \\     /:/  /        /:/\\:\\  \\     /:/\\:\\  \\     /:/\\ \\  \\       \\:\\  \\\s
+              /::\\~\\:\\  \\   /::\\~\\:\\  \\   /:/__/  ___   /::\\~\\:\\  \\   /::\\~\\:\\  \\   _\\:\\~\\ \\  \\      /::\\__\\
+             /:/\\:\\ \\:\\__\\ /:/\\:\\ \\:\\__\\  |:|  | /\\__\\ /:/\\:\\ \\:\\__\\ /:/\\:\\ \\:\\__\\ /\\ \\:\\ \\ \\__\\  __/:/\\/__/
+             \\/_|::\\/:/  / \\:\\~\\:\\ \\/__/  |:|  |/:/  / \\:\\~\\:\\ \\/__/ \\/_|::\\/:/  / \\:\\ \\:\\ \\/__/ /\\/:/  /  \s
+                |:|::/  /   \\:\\ \\:\\__\\    |:|__/:/  /   \\:\\ \\:\\__\\      |:|::/  /   \\:\\ \\:\\__\\   \\::/__/   \s
+                |:|\\/__/     \\:\\ \\/__/     \\::::/__/     \\:\\ \\/__/      |:|\\/__/     \\:\\/:/  /    \\:\\__\\   \s
+                |:|  |        \\:\\__\\        ~~~~          \\:\\__\\        |:|  |        \\::/  /      \\/__/   \s
+                 \\|__|         \\/__/                       \\/__/         \\|__|         \\/__/               \s
+            """;
+
     public MenuScreen(final ScreenAdder screenAdder,
                       final Scanner inputScanner) {
         super(screenAdder, inputScanner);
@@ -12,8 +27,8 @@ public class MenuScreen extends Screen {
 
     @Override
     public void draw() {
-        System.out.printf("%n%n%n\t\tReversi%n%n%n%n%n");
-    }
+        System.out.printf("%n%n%s%n%n", ASCII_BANNER);
+        System.out.printf("(hint: type 'help' for help)%n%n");    }
 
     @Override
     public void onUpdate() {
@@ -21,7 +36,7 @@ public class MenuScreen extends Screen {
         final var input = splitInput(ConsoleUtil.readLine(inputScanner));
 
         if (input.isEmpty()) {
-            log("Please enter a valid command or type 'help'");
+            log("Please enter a valid command");
             return;
         }
 
@@ -45,8 +60,6 @@ public class MenuScreen extends Screen {
     }
 
     private void startGame() {
-        // Allow user to choose black player's type and white player's type using PlayerChooseScreen.
-        // Then push a new GameScreen with player to the stack.
         screenAdder.push(new PlayerChooseScreen(screenAdder, inputScanner,
                 blackPlayer -> screenAdder.push(new PlayerChooseScreen(screenAdder, inputScanner,
                         whitePlayer -> screenAdder.push(new GameScreen(screenAdder, inputScanner, blackPlayer, whitePlayer)),

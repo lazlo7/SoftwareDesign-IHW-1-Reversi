@@ -1,5 +1,5 @@
 package net.requef.reversi.app;
 
 public class GameSettings {
-    public static boolean printPossibleMoves = true;
+    public static boolean showPossibleMoves = true;
 }

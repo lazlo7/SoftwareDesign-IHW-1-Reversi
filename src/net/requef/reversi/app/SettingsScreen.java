@@ -13,7 +13,7 @@ public class SettingsScreen extends Screen {
     @Override
     public void draw() {
         System.out.println("Settings:");
-        System.out.printf("1: [%s] Print possible moves%n", GameSettings.printPossibleMoves ? "X" : " ");
+        System.out.printf("1: [%s] Print possible moves%n", GameSettings.showPossibleMoves ? "X" : " ");
     }
 
     @Override
@@ -44,7 +44,7 @@ public class SettingsScreen extends Screen {
 
     private void toggleSetting(final String settingNumber) {
         switch (settingNumber) {
-            case "1" -> GameSettings.printPossibleMoves = !GameSettings.printPossibleMoves;
+            case "1" -> GameSettings.showPossibleMoves = !GameSettings.showPossibleMoves;
             default -> log("Unknown setting number");
         }
     }
