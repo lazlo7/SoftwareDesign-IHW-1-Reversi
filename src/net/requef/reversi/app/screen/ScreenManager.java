@@ -11,14 +11,25 @@ public class ScreenManager implements ScreenPusher {
         screens.addLast(screen);
     }
 
+    /**
+     * Pops the top of the screen stack.
+     */
     public void pop() {
         screens.removeLast();
     }
 
+    /**
+     * Peeks into the top of the screen stack.
+     * @return the top of the screen stack.
+     */
     public Screen peek() {
         return screens.peekLast();
     }
 
+    /**
+     * Checks if the screen stack is empty.
+     * @return true if the screen stack is empty, false otherwise.
+     */
     public boolean isEmpty() {
         return screens.isEmpty();
     }

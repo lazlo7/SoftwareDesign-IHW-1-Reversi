@@ -16,7 +16,16 @@ public abstract class Screen implements Drawable {
         this.inputScanner = inputScanner;
     }
 
+    /**
+     * onUpdate() gets called every frame after draw().
+     * User interaction and application logic should be implemented here.
+     */
     public abstract void onUpdate();
+
+    /**
+     * Checks if the screen should be exited.
+     * @return true if the screen should be exited, false otherwise
+     */
     public boolean shouldExit() {
         return shouldExit;
     }
@@ -25,12 +34,20 @@ public abstract class Screen implements Drawable {
         logQueue.add(message);
     }
 
+    /**
+     * Dumps the entire log queue to the console.
+     */
     public void dumpLogs() {
         while (!logQueue.isEmpty()) {
             System.out.println(logQueue.poll());
         }
     }
 
+    /**
+     * Splits the input string into a list of arguments using space as a delimiter.
+     * @param input the input string
+     * @return a list of arguments
+     */
     public static List<String> splitInput(final String input) {
         return Arrays.stream(input.split(" ")).toList();
     }
